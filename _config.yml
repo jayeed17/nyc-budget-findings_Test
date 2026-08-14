@@ -1,3 +1,7 @@
 theme: jekyll-theme-cayman
-title: NYC DOT Budget Analysis
-description: Planned vs. actual operating spending, FY2011-2027 — data corrections, forecasting, and findings
+title: NYC Budget Allocation Findings
+description: Planned vs. actual spending, forecasting, and budget insights across major NYC agencies.
+url: "https://jayeed17.github.io"
+baseurl: "/nyc-budget-findings_Test"
+repository: jayeed17/nyc-budget-findings_Test
+github_repository_url: "https://github.com/jayeed17/nyc-budget-findings_Test"

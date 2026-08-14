@@ -1,59 +1,83 @@
 ---
-title: Methodology & Diagnostics — NYC DOT Budget Analysis
+title: DOT Methodology & Diagnostics
+description: Data preparation, validation, model comparison, and limitations for the NYC DOT operating-spending forecast.
 ---
 
-# Methodology, Model Comparison & Diagnostics
+<div class="page-hero">
+  <div class="section-inner">
+    <div class="eyebrow">DOT technical report</div>
+    <h1>Methodology, Model Comparison &amp; Diagnostics</h1>
+    <p class="subtitle">The evidence behind the FY2027 forecast—from scope corrections to chronological backtesting.</p>
+  </div>
+</div>
 
-[← Back to findings](index.html)
-
-Full detail behind the headline numbers on the [findings page](index.html): the exploratory charts, the two data corrections, every candidate forecasting model, and the limitations of each result.
+<article class="prose" markdown="1">
+<a class="back-link" href="{{ '/' | relative_url }}#dot">← Back to DOT findings</a>
 
 ## Budget & Spending EDA
 
-<img src="assets/images/budget_eda.png" alt="Adopted vs modified vs actual spending, year-over-year growth, and budget utilization">
+<img src="{{ '/assets/images/budget_eda.png' | relative_url }}" alt="DOT adopted, modified and actual spending, growth, and utilization charts">
 
-*Adopted/modified/actual spending, year-over-year growth, and modified-budget utilization, FY2011–2027.*
+The completed-year series separates budget plans from actual operating execution. FY2027 is retained as budget context but excluded from completed-year growth and utilization.
 
-<img src="assets/images/spending_eda.png" alt="Budget variance, revision rate, and nominal vs CPI-adjusted actual spending">
+<img src="{{ '/assets/images/spending_eda.png' | relative_url }}" alt="DOT budget variance, modification rate, and nominal versus real spending charts">
 
-*Budget variance against adopted and modified plans, the in-year revision rate, and nominal vs. CPI-adjusted ("real") spending — the evidence behind the inflation finding.*
+Nominal and CPI-adjusted spending are shown together so price growth is not mistaken for expanded operating capacity.
 
-## The Data & Corrections
+## Data & Scope Corrections
 
-Two scope errors in the raw source files were found and corrected before any aggregation:
+1. **FY2022 multi-agency contamination.** The budget source contained roughly 150 other NYC agencies. Every year is consistently filtered to `Agency == "Department of Transportation"`.
+2. **Operating-versus-capital mismatch.** Checkbook spending contains construction and other capital transactions while the budget series is operating expense. Spending is retained only when its budget-code prefix appears in DOT’s operating-budget data; `Payroll Summary` is retained separately because early legitimate payroll records use a different format.
+3. **Partial FY2027.** Recorded actual spending is only **9.9%** of modified budget. It is excluded from every completed-year KPI, relationship, and model-performance statistic.
 
-1. **FY2022 multi-agency contamination.** Every fiscal year's budget source file was pre-filtered to DOT rows only — except FY2022, which shipped with **~150 other NYC agencies' rows mixed in** (Health, Education, Police, pension and reserve funds, and more), inflating FY2022 Adopted from a plausible ~$1.3B to an implausible ~$100.6B. **Fix:** every budget row is filtered to `Agency == "Department of Transportation"`, applied uniformly across all years so the correction is consistent rather than a one-off patch.
-2. **Expense-vs-capital scope mismatch.** The raw spending (Checkbook) file mixes operating-expense and capital transactions (construction, bridge hazard-mitigation project codes, etc.), while the budget file is expense-only. **Fix:** spending rows are kept only when their Budget Code matches a code that actually appears in DOT's own operating budget file (`Payroll Summary` is retained separately since its early records don't share that code format but are legitimate operating expense).
+No unusual year is automatically discarded. Scope, timing, and known structural changes are explained instead.
 
-FY2027 — barely underway at analysis time (actual = **9.9%** of modified budget) — is retained for context but excluded from every completed-year KPI, correlation, and validation result.
+## Forecasting Design
 
-## Forecasting Approach
+The main comparison uses an **expanding-window one-step-ahead backtest** from FY2019 through FY2026. A recent holdout trains through FY2023 and reports FY2024–FY2026 separately. A random train/test split is avoided because it would allow future years to inform earlier predictions.
 
-Models are evaluated strictly out of sample: an **expanding-window backtest** starting FY2019 and rolling one year at a time through FY2026, plus a simple holdout (train through FY2023, test FY2024–FY2026). No random splits — every test respects fiscal-year chronology, using only information available at the start of a forecast year.
+The tested models are intentionally explainable:
 
-Nine candidate specifications were compared: a plain year trend, naive prior-year persistence, combinations of lagged actual spending with the adopted or modified budget, lagged CPI/inflation/gas price, and a fixed ARIMA(1,1,0) benchmark.
+- Naive prior-year persistence
+- Linear fiscal-year trend
+- Lag-1 actual-spending regression
+- Lag-1 plus current adopted budget
+- Lag-1 plus modified budget, labeled **in-year only**
+- Lag-1 plus adopted budget and one lagged external variable at a time
+- Fixed low-order ARIMA(1,1,0) benchmark
 
-<img src="assets/images/validation_performance.png" alt="Bar charts comparing MAPE, RMSE, MAE, and out-of-sample R-squared across candidate forecasting models">
+The selected Lag-1 + Adopted model achieves **3.44% MAPE**, **$41.8M MAE**, **$60.2M RMSE**, and **0.902 out-of-sample R²**. Its MAPE is **42.5% lower** than naive persistence.
 
-*Out-of-sample MAPE, RMSE, MAE, and R² across all nine candidate models — **Lag-1 + Adopted** wins on every metric; none of the lagged external variables (CPI, inflation, gas) improve on it.*
+<img src="{{ '/assets/images/validation_performance.png' | relative_url }}" alt="DOT model comparison using MAPE, RMSE, MAE, and out-of-sample R-squared">
 
-The selected model — prior-year actual combined with the current adopted budget — achieves **3.44% MAPE**, **$41.8M MAE**, **$60.2M RMSE**, and **0.902 out-of-sample R²**, a **42.5%** MAPE improvement over naive persistence (repeating last year's actual unchanged). That comparison against the naive baseline is the honest test, not the raw accuracy score alone.
+MAPE is the primary metric. MAE communicates the typical dollar miss, RMSE emphasizes large misses, and out-of-sample R² is supporting context—not a substitute for chronological forecast accuracy.
 
-<img src="assets/images/lag1_relationship.png" alt="Scatter plot of prior-year actual spending vs current-year actual spending">
+## Why Lag-1 Makes Business Sense
 
-*Prior-year actual vs. current-year actual, FY2012–FY2026 (r = 0.980) — the persistence relationship the winning model leans on.*
+DOT payroll, maintenance, contracts, and operations recur from year to year. Prior-year actual spending is therefore a practical baseline rather than an abstract statistical feature.
 
-<img src="assets/images/forecast_diagnostics.png" alt="Backtest diagnostics: actual vs predicted spending, prediction error by year, absolute percentage error, and residual plot">
+<img src="{{ '/assets/images/lag1_relationship.png' | relative_url }}" alt="Prior-year versus current-year DOT operating spending scatter plot">
 
-*Backtest diagnostics for the selected model — errors are small, don't trend over time, and show no strong residual pattern.*
+The Lag-1 Pearson correlation is **0.980**, with a simple relationship R² of **0.961**. This is strong historical association, not proof of causation; the expanding-window test determines whether it forecasts well.
+
+## Forecast Diagnostics
+
+<img src="{{ '/assets/images/forecast_diagnostics.png' | relative_url }}" alt="DOT actual versus predicted, error, percentage error, and residual diagnostics">
+
+Diagnostics show performance year by year rather than hiding variation inside one score. External-variable models remain visible even though lagged CPI, inflation, and gas prices did not improve the selected total-spending model.
+
+<img src="{{ '/assets/images/final_forecast.png' | relative_url }}" alt="Historical DOT actual operating spending and FY2027 forecast with uncertainty interval">
+
+The final model forecasts **$1.522B** for FY2027, with an approximate 95% planning range of **$1.396B–$1.647B**. FY2028–FY2029 are not forecast because future adopted-budget inputs are unavailable.
 
 ## Limitations
 
-- **Correlation is descriptive, not causal** — including the gas-price/fuel-spending relationship. Fuel spending reflects price *and* quantity purchased (fleet size, miles driven, snow-plowing intensity); gallons data isn't available to separate the two.
-- **Small annual sample.** Validation uses well under twenty annual observations (fewer once lagged), split chronologically rather than randomly. Treat p-values and R² as supporting evidence, not proof.
-- **FY2028–FY2029 are not forecast.** No adopted-budget input exists yet for those years, and this analysis deliberately avoids inventing scenario assumptions to fill that gap.
-- **Both data corrections are applied uniformly across all fiscal years**, not as one-off patches to the years where they were first noticed.
+- The annual sample is small, especially after lagging; metrics should be interpreted as applied planning evidence, not universal proof.
+- Correlation is not causation. CPI can proxy for time, while gas-price effects may exist only within the small fuel category.
+- FY2011–FY2016 budget totals come from OMB summaries; FY2016 modified budget is unavailable.
+- The interval is an empirical planning range based on historical errors, not a guarantee.
+- Policy changes, emergencies, labor settlements, and new programs may produce outcomes outside the historical pattern.
 
----
+<div class="callout"><strong>Decision rule:</strong> prefer the simplest model that performs well out of sample, beats persistence, uses information available at forecast time, and has defensible business logic.</div>
 
-*Source notebook: [`DOT_Final_Capstone_Analysis.ipynb`](https://github.com/lindali-huishan/NYC_Budget_Allocation/blob/vmax/DOT/DOT_Final_Capstone_Analysis.ipynb). Interactive charts are regenerated from raw data via [`DOT/build_interactive_charts.py`](https://github.com/lindali-huishan/NYC_Budget_Allocation/blob/vmax/DOT/build_interactive_charts.py).*
+</article>
