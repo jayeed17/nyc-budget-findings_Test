@@ -25,14 +25,20 @@
         <nav class="nav-links" id="site-menu" aria-label="Primary navigation">
           <a href="{{ '/' | relative_url }}#home">Home</a>
           <a href="{{ '/' | relative_url }}#dot">DOT</a>
-          <a href="{{ '/' | relative_url }}#parks">Parks</a>
-          <a href="{{ '/' | relative_url }}#education">Education</a>
+          <a href="{{ '/' | relative_url }}#eda">EDA</a>
+          <a href="{{ '/' | relative_url }}#forecast">Forecast</a>
+          <a href="{{ '/' | relative_url }}#scenarios">Scenarios</a>
+          <a href="{{ '/' | relative_url }}#app">App</a>
           <a href="{{ '/' | relative_url }}#methodology">Methodology</a>
           <a href="{{ '/' | relative_url }}#recommendations">Recommendations</a>
         </nav>
       </div>
     </header>
     <main id="main-content">{{ content }}</main>
+    <div class="lightbox" id="chart-lightbox" role="dialog" aria-modal="true" aria-label="Expanded chart" aria-hidden="true">
+      <button class="lightbox-close" type="button" aria-label="Close expanded chart">×</button>
+      <img src="" alt="">
+    </div>
     <footer class="site-footer">
       <div class="footer-inner">
         <div><div class="footer-title">NYC Budget Allocation Findings</div><p>Data-driven analysis of NYC agency spending and forecasting.</p></div>
@@ -55,6 +61,28 @@
           toggle.setAttribute('aria-expanded', 'false'); menu.classList.remove('is-open');
         }));
       }
+      const lightbox = document.getElementById('chart-lightbox');
+      const lightboxImage = lightbox ? lightbox.querySelector('img') : null;
+      const lightboxClose = lightbox ? lightbox.querySelector('.lightbox-close') : null;
+      let lightboxTrigger = null;
+      const closeLightbox = () => {
+        if (!lightbox) return;
+        lightbox.classList.remove('is-open'); lightbox.setAttribute('aria-hidden', 'true');
+        document.body.classList.remove('lightbox-open');
+        if (lightboxImage) { lightboxImage.src = ''; lightboxImage.alt = ''; }
+        if (lightboxTrigger) lightboxTrigger.focus();
+      };
+      document.querySelectorAll('[data-lightbox]').forEach(link => link.addEventListener('click', event => {
+        if (!lightbox || !lightboxImage) return;
+        event.preventDefault(); lightboxTrigger = link;
+        const sourceImage = link.querySelector('img');
+        lightboxImage.src = link.href; lightboxImage.alt = sourceImage ? sourceImage.alt : 'Expanded chart';
+        lightbox.classList.add('is-open'); lightbox.setAttribute('aria-hidden', 'false');
+        document.body.classList.add('lightbox-open'); lightboxClose.focus();
+      }));
+      if (lightboxClose) lightboxClose.addEventListener('click', closeLightbox);
+      if (lightbox) lightbox.addEventListener('click', event => { if (event.target === lightbox) closeLightbox(); });
+      document.addEventListener('keydown', event => { if (event.key === 'Escape' && lightbox && lightbox.classList.contains('is-open')) closeLightbox(); });
     </script>
   </body>
 </html>
