@@ -42,20 +42,20 @@ body_class: home-page
       <p>DOT is the first completed agency model. Education and Parks &amp; Recreation are visible as intentional next phases—without unpublished results.</p>
     </div>
     <div class="agency-grid">
-      <article class="agency-card active">
+      <article class="agency-card active dot-agency">
         <div class="agency-icon" aria-hidden="true">➜</div><span class="status active">Active analysis</span>
         <h3>Department of Transportation</h3><p>Historical execution, economic drivers, chronological forecasting, and allocation scenarios.</p>
         <a class="btn btn-primary" href="#dot">View DOT Analysis</a>
       </article>
-      <article class="agency-card disabled" id="education">
+      <article class="agency-card disabled doe-agency" id="education">
         <div class="agency-icon" aria-hidden="true">▤</div><span class="status">Analysis in progress</span>
         <h3>Department of Education</h3><p>The same validation framework will be applied when the agency analysis is complete.</p>
         <span class="btn" aria-disabled="true">Coming Soon</span>
       </article>
-      <article class="agency-card disabled" id="parks">
-        <div class="agency-icon" aria-hidden="true">♧</div><span class="status">Analysis in progress</span>
-        <h3>Parks &amp; Recreation</h3><p>A dedicated agency model and evidence-based findings will follow in a future release.</p>
-        <span class="btn" aria-disabled="true">Coming Soon</span>
+      <article class="agency-card" id="parks">
+        <div class="agency-icon" aria-hidden="true">♧</div><span class="status">Forecast Analysis Available</span>
+        <h3>NYC Parks &amp; Recreation</h3><p>Budget history, spending patterns, and forward-looking projections through FY2029.</p>
+        <a class="btn" href="#parks-analysis">View Parks Analysis</a>
       </article>
     </div>
   </div>
@@ -195,12 +195,50 @@ body_class: home-page
   </div>
 </section>
 
+<section class="section parks-section" id="parks-analysis" aria-labelledby="parks-analysis-title">
+  <div class="section-inner">
+    <div class="section-heading">
+      <div><div class="eyebrow">Forecast Analysis Available</div><h2 id="parks-analysis-title"><strong>DOPR</strong> — NYC Parks &amp; Recreation</h2></div>
+      <p>Budget history, spending patterns, and forward-looking projections for NYC Parks.</p>
+    </div>
+
+    <article class="feature-story">
+      <a class="visual-card lightbox-link" href="{{ '/assets/images/parks/parks_budget_vs_actual.png' | relative_url }}" data-lightbox aria-label="Open NYC Parks historical budget versus actual spending chart">
+        <img src="{{ '/assets/images/parks/parks_budget_vs_actual.png' | relative_url }}" alt="NYC Parks adopted budget, modified budget, and actual spending by fiscal year." loading="lazy">
+      </a>
+      <div class="story-copy">
+        <span class="story-label">Historical Budget vs Actual Spending</span>
+        <p>Parks spending generally rose alongside adopted and modified budgets, while some years showed larger budget-to-spending gaps.</p>
+        <p class="note">FY2027 actual spending is partial.</p>
+      </div>
+    </article>
+
+    <article class="feature-story reverse compact-top">
+      <a class="visual-card lightbox-link" href="{{ '/assets/images/parks/parks_forecast.png' | relative_url }}" data-lightbox aria-label="Open NYC Parks forecast outlook chart">
+        <img src="{{ '/assets/images/parks/parks_forecast.png' | relative_url }}" alt="NYC Parks modified budget and actual spending history with projections through FY2029." loading="lazy">
+      </a>
+      <div class="story-copy">
+        <span class="status parks-badge">Forecast through FY2029</span>
+        <h3 class="parks-name">Forecast Outlook</h3>
+        <p>Historical budget and spending trends are extended through FY2029, with uncertainty bands around future projections.</p>
+      </div>
+    </article>
+
+    <article class="parks-heatmap compact-top">
+      <div class="centered-heading"><span class="story-label">Key Relationships</span><p>Actual spending is strongly related to adopted and modified budgets, while several operational variables show much weaker relationships.</p></div>
+      <a class="visual-card lightbox-link" href="{{ '/assets/images/parks/parks_correlation_heatmap.png' | relative_url }}" data-lightbox aria-label="Open NYC Parks correlation heatmap">
+        <img src="{{ '/assets/images/parks/parks_correlation_heatmap.png' | relative_url }}" alt="Correlation heatmap for NYC Parks budget, spending, variance, payment count, and utilization variables." loading="lazy">
+      </a>
+    </article>
+  </div>
+</section>
+
 <section class="section app-section" id="app" aria-labelledby="app-title">
   <div class="section-inner app-shell">
-    <div class="app-copy"><span class="status active">Coming soon</span><div class="eyebrow">Interactive Budget Simulator</div><h2 id="app-title">From Analysis to Interactive Budget Planning</h2><p>The next phase will turn the forecasting and scenario-analysis framework into an interactive decision-support application.</p><div class="button-row"><span class="btn app-disabled" aria-disabled="true">Launch App — Coming Soon</span></div></div>
+    <div class="app-copy"><div class="agency-indicators" aria-label="Agencies represented"><span class="dot-indicator">DOT</span><i aria-hidden="true">•</i><span class="parks-indicator">PARKS</span><i aria-hidden="true">•</i><span class="doe-indicator">DOE</span></div><span class="status app-status">Coming soon</span><div class="eyebrow">Interactive Budget Simulator</div><h2 id="app-title">Decision Support App</h2><p>The next phase will turn the forecasting and scenario-analysis framework into an interactive decision-support application.</p><div class="button-row"><span class="btn app-disabled" aria-disabled="true">Launch App — Coming Soon</span></div></div>
     <div class="app-preview" aria-label="Planned app capabilities">
       <div class="preview-bar"><span></span><span></span><span></span><b>NYC Budget Decision Support</b></div>
-      <div class="preview-body"><div class="preview-control"><small>Agency</small><strong>Department of Transportation</strong></div><div class="preview-control"><small>Proposed allocation</small><strong>$1.70B</strong></div><div class="preview-output"><span><small>Projected utilization</small><b>93.7%</b></span><span><small>Planning cushion</small><b>$106.7M</b></span></div><div class="preview-watermark">IN DEVELOPMENT</div></div>
+      <div class="preview-body"><div class="preview-control"><small>Select agency</small><div class="preview-agencies"><span class="dot-pill">DOT</span><span class="parks-pill">Parks</span><span class="doe-pill">DOE</span></div></div><div class="preview-control"><small>Proposed allocation</small><strong>$1.70B</strong></div><div class="preview-output"><span><small>Projected utilization</small><b>93.7%</b></span><span><small>Planning cushion</small><b>$106.7M</b></span></div><div class="preview-watermark">IN DEVELOPMENT</div></div>
     </div>
     <div class="capability-grid"><span>Select NYC agency</span><span>View historical execution</span><span>Explore forecasts</span><span>Change proposed allocations</span><span>Test inflation assumptions</span><span>Compare decision metrics</span></div>
   </div>
@@ -210,11 +248,11 @@ body_class: home-page
   <div class="section-inner">
     <div class="section-heading"><div><div class="eyebrow">Multi-agency future</div><h2 id="roadmap-title">One Framework, More Agencies</h2></div><p>DOT is the first completed agency model. DOE and Parks &amp; Recreation will follow the same standardized analysis framework.</p></div>
     <div class="roadmap">
-      <article class="complete"><span>Completed</span><h3>DOT</h3></article>
-      <article><span>In progress</span><h3>DOE</h3></article>
-      <article><span>In progress</span><h3>Parks &amp; Recreation</h3></article>
-      <article><span>Next phase</span><h3>Cross-Agency Decision Support</h3></article>
-      <article><span>Coming soon</span><h3>Interactive App</h3></article>
+      <article class="complete dot-roadmap"><span>Forecast + Decision Support Available</span><h3>DOT</h3></article>
+      <article class="parks-roadmap"><span>Forecast Analysis Available</span><h3>Parks / DOPR</h3></article>
+      <article class="doe-roadmap"><span>Analysis In Progress</span><h3>DOE</h3></article>
+      <article class="cross-roadmap"><span>Next phase</span><div class="roadmap-indicators" aria-hidden="true"><i></i><i></i><i></i></div><h3>Cross-Agency Decision Support</h3></article>
+      <article class="app-roadmap"><span>Coming soon</span><div class="roadmap-indicators" aria-hidden="true"><i></i><i></i><i></i></div><h3>Interactive App</h3></article>
     </div>
   </div>
 </section>
@@ -229,5 +267,28 @@ body_class: home-page
       <article class="method-card"><span class="step">04 · VALIDATE</span><h3>Respect chronology</h3><p>Use expanding-window backtests with MAPE primary and MAE, RMSE, and R² supporting.</p></article>
     </div>
     <div class="button-row"><a class="btn btn-primary" href="{{ '/methodology.html' | relative_url }}">View Full Methodology&nbsp; →</a></div>
+  </div>
+</section>
+
+<section class="section snake-section" id="budget-break" aria-labelledby="snake-title">
+  <div class="section-inner snake-inner">
+    <div class="snake-copy">
+      <div class="agency-indicators" aria-hidden="true"><span class="dot-indicator">DOT</span><i>•</i><span class="parks-indicator">PARKS</span><i>•</i><span class="doe-indicator">DOE</span></div>
+      <div class="eyebrow">Optional Easter egg</div>
+      <h2 id="snake-title">Budget Break 🐍</h2>
+      <p>Take a quick break while the next forecast loads.</p>
+      <p class="snake-help" id="snake-help">Use arrow keys, WASD, or the on-screen controls.</p>
+    </div>
+    <div class="snake-game" aria-describedby="snake-help">
+      <div class="snake-hud"><span>Score <strong id="snake-score">0</strong></span><span>High score <strong id="snake-high-score">0</strong></span><span id="snake-agency-label" aria-live="polite">Ready</span></div>
+      <canvas id="budget-snake" width="320" height="320" tabindex="0" aria-label="Budget Break Snake game board"></canvas>
+      <div class="snake-actions"><button class="btn snake-start" id="snake-start" type="button">Start Game</button><button class="btn snake-restart" id="snake-restart" type="button">Restart</button></div>
+      <div class="snake-dpad" aria-label="Snake direction controls">
+        <button type="button" data-direction="up" aria-label="Move up">↑</button>
+        <button type="button" data-direction="left" aria-label="Move left">←</button>
+        <button type="button" data-direction="down" aria-label="Move down">↓</button>
+        <button type="button" data-direction="right" aria-label="Move right">→</button>
+      </div>
+    </div>
   </div>
 </section>
